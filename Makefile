@@ -13,10 +13,10 @@ site:
 	mkdir site
 
 $(MD_TARGETS): site/%.html: %.md markdown_w
-	markdown_w < $< > $@
+	./markdown_w < $< > $@
 
 $(GEN_TARGETS): site/%.html: %.gen markdown_w
-	$</gen | markdown_w > $@
+	$</gen | ./markdown_w > $@
 
 site/global.css: global.css
 	cp global.css site/global.css
