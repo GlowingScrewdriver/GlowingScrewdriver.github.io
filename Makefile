@@ -6,8 +6,11 @@ MD_TARGETS := $(addprefix site/, $(addsuffix .html, $(MD_FILES)))
 GEN_FILES := $(basename $(wildcard *.gen))
 GEN_TARGETS := $(addprefix site/, $(addsuffix .html, $(GEN_FILES)))
 
-.PHONY: site
-site: $(MD_TARGETS) $(GEN_TARGETS) site/global.css
+.PHONY: website
+website: site $(MD_TARGETS) $(GEN_TARGETS) site/global.css
+
+site:
+	mkdir site
 
 $(MD_TARGETS): site/%.html: %.md markdown_w
 	markdown_w < $< > $@
