@@ -1,0 +1,36 @@
+#!/bin/awk -f
+
+### Wrapper around markdown for menial tasks
+### such as linking the stylesheet and setting the page title
+
+BEGIN {
+    print "<!DOCTYPE html>" # Be professional!
+
+    getline
+    head() # The entire <head> tag. $0 should hold the document title as "# TITLE"
+    print "<body>"
+    printmd() # Don't eat up the title of the page
+}
+
+{ printmd() }
+
+END {
+    close ("markdown") # Flush all output
+    print "</body>"
+}
+
+function head() {
+    TITLE = $0
+    sub (/^# /, "", TITLE)
+
+    TAG_TITLE = "<title>" TITLE " | GlowingScrewdriver's Blog" "</title>"
+    TAG_CSS = "<link rel='stylesheet' href='global.css'></link>"
+    TAG_DARKREADER = "<meta name='darkreader-lock'>"
+    HEAD = "<head>" TAG_TITLE TAG_CSS TAG_DARKREADER "</head>\n"
+    print(HEAD)
+}
+
+function printmd(str) {
+    if (! str) str = $0
+    print str | "markdown"
+}

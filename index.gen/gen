@@ -1,0 +1,23 @@
+#!/bin/sh
+
+### Generator for the index page
+### Output will be passed through markdown_w
+
+dir=`dirname "$0"`
+
+# Beginning of the page
+cat $dir/head.md
+
+# Index
+for file in *; do
+    fname=${file%.*}
+    fext=${file##$fname}
+
+    if [ "$fext" = ".md" ]; then
+        title=`head -n 1 "$file"`
+        echo "<a href='${fname}.html'> <h3> ${title##'# '} </h3> </a>"
+    fi
+done
+
+# Rest of the page: about me and the website
+cat $dir/tail.md

@@ -1,0 +1,40 @@
+:root {
+    --text-color: #ccc;
+    --bg-color: #222;
+    --accent-color: #7e0000;
+    --accent-color-text: #00abb3;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: large;
+    background: var(--bg-color);
+    /*background: linear-gradient(to right, var(--bg-color) 0%, var(--bg-color) 70%, var(--accent-color));*/
+    color: var(--text-color);
+    padding-inline: 20%;
+    padding-top: 5%;
+    margin: 0px;
+}
+
+h1 {
+    text-align: center;
+}
+
+h1, h2, h3 {
+    font-family: Courier New;
+    margin-bottom: 0.2em;
+    margin-left: 0.2em;
+}
+
+h1, h2 {
+    text-decoration: underline;
+}
+
+a {
+    color: var(--accent-color-text);
+}
+
+p {
+    margin-top: 0px;
+    font-size: large;
+}
