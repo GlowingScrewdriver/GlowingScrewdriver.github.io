@@ -34,7 +34,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build Website
-        run: make site
+        run: make
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
