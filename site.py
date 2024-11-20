@@ -5,6 +5,7 @@ from os import listdir
 from marko.ext.gfm import gfm
 from argparse import ArgumentParser
 from copy import copy
+from io import BytesIO
 
 class SiteGenerator:
     def __init__ (self, template_filename: str, pages_dir: str, site_dir: str):
@@ -28,23 +29,42 @@ class SiteGenerator:
     def apply_template (self, src, dst):
         """
         Convert a the markdown from `src` to HTML, insert it into
-        the content element of the template, and write the template to `dst`
+        the content element of the template, and write the template to `dst`.
+        Title of the page is returned.
         """
-        content = ET.fromstring ("<div>" + gfm(src.read ()) + "</div>")
+        if isinstance (src, str):
+            content_str = src
+        else:
+            content_str = src.read ()
+
+        content = ET.fromstring ("<div>" + gfm(content_str) + "</div>")
+        title = content.find ("h1").text # First <h1> is taken to hold the page title.
         self.template_content.extend (content)
         dst.write (ET.tostring (self.template))
         self.template_content.clear ()
+        return title
 
-
-    def gen_pages (self, pagenames = None):
+    def gen_pages (self, index_filename = "index.html", pagenames = None):
+        """
+        Generate site pages (HTML) from all page sources (Markdown).
+        Also outputs a site index
+        """
+        site_index = []  # [(Title, path) ... ]
         if pagenames is None: pagenames = self.pages
         for pagename in pagenames:
             src = open (f"{self.pages_dir}/{pagename}.md")
             dst = open (f"{self.site_dir}/{pagename}.html", "wb")
-            self.apply_template (src, dst)
+            title = self.apply_template (src, dst)
+            site_index.append ((title, f"{pagename}.html"))
             src.close ()
             dst.close ()
 
+        index_page = "# Blog posts\n" + "\n".join((
+            f"* [{title}]({path})"
+            for title, path in site_index
+        ))
+        with open (f"{self.site_dir}/{index_filename}", "wb") as index_file:
+            self.apply_template (index_page, index_file)
 
 def gen_site (pages_dir, site_dir, template_file):
     with open (template_file) as template_f:
