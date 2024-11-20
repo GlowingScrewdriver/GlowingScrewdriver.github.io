@@ -36,7 +36,7 @@ jobs:
       - name: Install Marko
         run: pip3 install marko
       - name: Build Website
-        run: site.py
+        run: ./site.py
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
